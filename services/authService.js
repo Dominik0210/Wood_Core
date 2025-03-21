@@ -1,10 +1,9 @@
-const conexion = require("../model/conexion");
+import conexion from "../model/conexion.js"; // Asegúrate de la extensión .js
 
 const consultaCrearUsuario = "INSERT INTO tareas_prueba SET ?";
 
-
-const createUser = (user) =>{
-    console.log("SERVICE", user); 
+const createUser = (user) => {
+    console.log("SERVICE", user);
 
     const documentoFormateado = parseInt(user.numeroDocumento);
 
@@ -15,19 +14,16 @@ const createUser = (user) =>{
         apellidos: user.apellidoPersona,
         tipo_rol: user.tipoRol,
         email: user.email,
-        password: user.password
-    }
+        password: user.password,
+    };
 
-    conexion.query(consultaCrearUsuario, [userToInsert], (err) =>{
-        if(err){
+    conexion.query(consultaCrearUsuario, [userToInsert], (err) => {
+        if (err) {
             console.log("ERROR al insertar usuario", err);
         }
 
         console.log("Usuario Registrado correctamente");
-    })
+    });
+};
 
-
-}
-
-
-module.exports = {createUser}
+export default { createUser };

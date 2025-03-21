@@ -1,19 +1,13 @@
-const authService = require("../services/authService.js")
-
-
-
+import authService from "../services/authService.js";
 
 class PersonsController {
-    constructor(){
+    constructor() {}
 
+    consultarUno(req, res) {
+        res.send({ message: "Un usuario" });
     }
 
-
-    consultarUno(req, res){
-        res.send({"message": "Un usuario"});
-    }
-
-    insertar(req, res){
+    insertar(req, res) {
         const {
             nombrePersona,
             apellidoPersona,
@@ -21,16 +15,24 @@ class PersonsController {
             numeroDocumento,
             tipoRol,
             email,
-            password
+            password,
         } = req.body;
-    
-        // prueba de código;
-        //console.log("CONTROLLER: ", apellidoPersona);
-    
-        if(!nombrePersona || !apellidoPersona || !tipoDocumento || !numeroDocumento || !tipoRol || !email || !password){
-            res.send({status: "ERROR", message: "Error(CONTROLLER) al recibir las tareas. Hay campos vacíos"})
+
+        if (
+            !nombrePersona ||
+            !apellidoPersona ||
+            !tipoDocumento ||
+            !numeroDocumento ||
+            !tipoRol ||
+            !email ||
+            !password
+        ) {
+            res.send({
+                status: "ERROR",
+                message: "Error(CONTROLLER) al recibir las tareas. Hay campos vacíos",
+            });
         }
-    
+
         const newPerson = {
             nombrePersona,
             apellidoPersona,
@@ -38,23 +40,15 @@ class PersonsController {
             numeroDocumento,
             tipoRol,
             email,
-            password
-        }
-    
+            password,
+        };
+
         authService.createUser(newPerson);
     }
 
-    actualizar(req, res){
+    actualizar(req, res) {}
 
-    }
-
-    eliminar(req, res){
-
-    }
+    eliminar(req, res) {}
 }
 
-
-
-
-
-module.exports = new PersonsController();
+export default new PersonsController();

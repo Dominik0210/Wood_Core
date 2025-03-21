@@ -54,45 +54,65 @@
 
     <!-- script de conexion con api para enviar correos -->
     <script>
- function validarUsuario() {
+        function validarUsuario() {
     const email = document.getElementById("InputEmail").value;
-    const data = {
-        toUser: [email], 
-        subject: "Recuperación de cuenta",
-        message: "Este es tu enlace para recuperar la cuenta."
-    };
 
-    fetch('http://localhost:8080/email/sendMessage', { 
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => {
-        if (response.ok) {
-            Swal.fire("Correo de recuperación enviado correctamente a tu correo!");
-            setTimeout(function () {
-                window.location.href = "/login";
-            }, 2500);
-        } else {
+fetch('http://localhost:8080/email/verifyEmail/${email}')
+        .then(response => {
+            if (response.ok) {
+                const data = {
+                    toUser: [email],
+                    subject: "Recuperación de cuenta",
+                    message: "Este es tu enlace para recuperar la cuenta."
+                };
+
+                fetch('http://localhost:8080/email/sendMessage', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        Swal.fire("Correo de recuperación enviado correctamente a tu correo!");
+                        setTimeout(function () {
+                            window.location.href = "/login";
+                        }, 2500);
+                    } else {
+                        Swal.fire({
+                            title: "Error",
+                            text: "No se pudo enviar el correo. Intenta nuevamente.",
+                            icon: "error"
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: "Error",
+                        text: "Ha ocurrido un error en la conexión con el servidor.",
+                        icon: "error"
+                    });
+                });
+            } else {
+                Swal.fire({
+                    title: "Error",
+                    text: "El correo electrónico ingresado no está registrado.",
+                    icon: "error"
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
             Swal.fire({
                 title: "Error",
-                text: "No se pudo enviar el correo. Intenta nuevamente.",
+                text: "Ha ocurrido un error al verificar el correo.",
                 icon: "error"
             });
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Swal.fire({
-            title: "Error",
-            text: "Ha ocurrido un error en la conexión con el servidor.",
-            icon: "error"
         });
-    });
 
-    return false; 
+    return false;
 }
 
     </script>

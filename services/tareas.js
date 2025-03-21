@@ -1,10 +1,6 @@
-// Código para mostrar las tareas y crearlos en el dashboard
-const conexion = require("../model/conexion")
-// const Task = require("../controllers/taskPrototype")
+import conexion from "../model/conexion.js";
+
 const seleccionarTareas = "SELECT * FROM tareas_prueba";
-
-
-
 
 function mostrarTareas() {
     return new Promise((resolve, reject) => {
@@ -13,10 +9,7 @@ function mostrarTareas() {
                 reject(err);
             } else {
                 const taskInfoArray = [];
-                //const cantidadTareas = listOfTasks.keys().length;
                 listOfTasks.forEach((task, indice) => {
-
-                    // Creación y asignación de las propiedades del objeto taskinfo
                     const tarea_id = task.tarea_id;
                     const nombre = task.nombre_tarea;
                     const prioridad = task.prioridad;
@@ -25,7 +18,6 @@ function mostrarTareas() {
                     const encargado = task.encargado_tarea;
                     const sprint = task.sprint_tarea;
 
-                    // asignación de las propiedades de cada una de las tareas
                     const taskInfo = {
                         tarea_id,
                         nombre,
@@ -33,65 +25,41 @@ function mostrarTareas() {
                         descripcion,
                         estado,
                         encargado,
-                        sprint
+                        sprint,
                     };
 
-
-                    // console.log(taskInfo)
-                    taskInfoArray.push(taskInfo)
-                    // console.log(tarea_id, nombre, prioridad, descripcion, estado, sprint)
-                    // for(const tarea of listOfTasks){
-                    // }
-
+                    taskInfoArray.push(taskInfo);
                 });
 
                 resolve(taskInfoArray);
-
             }
-        })
-    })
+        });
+    });
 }
-
-
-
-
-///////////////////////////////////////////////////////////
-// SERVICIO PARA INSERTAR/CREAR UNA NUEVA TAREA EN LA BD //
-
 
 const crearTarea = (taskToInsert) => {
     const registrarTarea = "INSERT INTO tareas_prueba SET ?";
 
     conexion.query(registrarTarea, [taskToInsert], function (err) {
         if (err) {
-            throw err
+            throw err;
         } else {
-            console.log("TAREA CREADA CORRECTAMENTE")
+            console.log("TAREA CREADA CORRECTAMENTE");
         }
-    })
-}
-
-
-
-
-
-
-
-
-////////////////////////////////////////////////////////////
-// CONSULTA PARA OBTENER LA TAREA INDIVIDUAL PARA EL UPDATE
+    });
+};
 
 const getOneTask = (idTarea) => {
-    const tareaABuscar = 'SELECT * FROM tareas_prueba WHERE tarea_id = ?';
+    const tareaABuscar = "SELECT * FROM tareas_prueba WHERE tarea_id = ?";
 
     return new Promise((resolve, reject) => {
         conexion.query(tareaABuscar, [idTarea], (err, tarea) => {
             if (err) {
-                reject(err)
+                reject(err);
             } else {
                 const arrayGetOneTask = [];
 
-                tarea.forEach(tareaIndividual => {
+                tarea.forEach((tareaIndividual) => {
                     const id = tareaIndividual.tarea_id;
                     const nombre = tareaIndividual.nombre_tarea;
                     const prioridad = tareaIndividual.prioridad;
@@ -107,34 +75,24 @@ const getOneTask = (idTarea) => {
                         descripcion,
                         estado,
                         encargado,
-                        sprint
-                    }
+                        sprint,
+                    };
 
-                    //console.log(taskInfo);
-                    arrayGetOneTask.push(taskInfo)
-                })
-
-                //prueba para confirmar que la tarea se obtuvo desde el service
-                //console.log("los datos de la tarea son: ", arrayGetOneTask);
+                    arrayGetOneTask.push(taskInfo);
+                });
 
                 resolve(arrayGetOneTask);
             }
-        })
-    })
-}
-
-
-
-
-//////////////////////////////////////////////////////////////
-// CONSULTA PARA MODIFICAR LA TAREA INDIVIDUAL DEL FORM UPDATE
+        });
+    });
+};
 
 const editOneTask = (idTarea, changesToEdit) => {
     return new Promise((resolve, reject) => {
-        console.log("El id de la tarea a actualizar es: ", idTarea)
+        console.log("El id de la tarea a actualizar es: ", idTarea);
         console.log(changesToEdit);
 
-        const consultaEditarTarea = "UPDATE tareas_prueba SET ? WHERE tarea_id = ?"
+        const consultaEditarTarea = "UPDATE tareas_prueba SET ? WHERE tarea_id = ?";
 
         conexion.query(consultaEditarTarea, [changesToEdit, idTarea], (err, tareaActualizada) => {
             if (err) {
@@ -143,15 +101,9 @@ const editOneTask = (idTarea, changesToEdit) => {
                 console.log("TAREA ACTUALIZADA CORRECTAMENTE");
                 resolve(tareaActualizada);
             }
-        })
-    })
-}
-
-
-
-//////////////////////////////////////////////////////////////
-// CONSULTA PARA ELIMINAR UNA TAREA INDIVIDUAL
-
+        });
+    });
+};
 
 const deleteOneTask = (idTask) => {
     return new Promise((resolve, reject) => {
@@ -162,22 +114,16 @@ const deleteOneTask = (idTask) => {
                 console.log("Error al eliminar la tarea (SERVICE)");
             } else {
                 console.log("TAREA ELIIMINADA CORRECTAMENTE");
-                resolve({"mensage": "tarea Eliminada Correctamente"});
+                resolve({ mensage: "tarea Eliminada Correctamente" });
             }
+        });
+    });
+};
 
-        })
-    })
-}
-
-
-
-
-
-
-module.exports = {
+export {
     mostrarTareas,
     crearTarea,
     getOneTask,
     editOneTask,
-    deleteOneTask
-}
+    deleteOneTask,
+};

@@ -1,20 +1,16 @@
-// Código para obtener las tareas y enviarlos al dashboard de proyectos
-const conexion = require("../model/conexion");
+import conexion from "../model/conexion.js";
 
 const seleccionarProyectos = "SELECT * FROM proyecto_prueba";
 
-
-function mostrarProyectos(){
+function mostrarProyectos() {
     return new Promise((resolve, reject) => {
-        conexion.query(seleccionarProyectos, function(err, listOfProjects){
-            if(err){
+        conexion.query(seleccionarProyectos, function (err, listOfProjects) {
+            if (err) {
                 reject(err);
-            }else{
-
+            } else {
                 const projectsInfoArray = [];
-                
-                listOfProjects.forEach(project => {
-                    // creación y asignación de las propiedades del objeto projectsInfo
+
+                listOfProjects.forEach((project) => {
                     const project_id = project.id_proyecto;
                     const nombre_proyecto = project.nombre_proyecto;
                     const prioridad = project.prioridad;
@@ -23,8 +19,6 @@ function mostrarProyectos(){
                     const miembros_proyecto = project.miembros_proyecto;
                     const roles_proyecto = project.roles_proyecto;
 
-                    
-                    // Asignación de las paropiedades al objeto projectsInfo
                     const projectsInfo = {
                         project_id,
                         nombre_proyecto,
@@ -32,22 +26,16 @@ function mostrarProyectos(){
                         sprint,
                         encargado_proyecto,
                         miembros_proyecto,
-                        roles_proyecto
-                    }
-
+                        roles_proyecto,
+                    };
 
                     projectsInfoArray.push(projectsInfo);
-
                 });
-                
+
                 resolve(projectsInfoArray);
-
             }
-        })
-    })
+        });
+    });
 }
 
-
-module.exports = {
-    mostrarProyectos
-}
+export { mostrarProyectos };

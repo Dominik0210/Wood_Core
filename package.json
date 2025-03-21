@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "Gestión y creación de proyectos",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "dev": "nodemon ./app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "type": "commonjs",
   "keywords": [],
-  "author": "Michael Garnica",
+  "author": "WoodNSP",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",

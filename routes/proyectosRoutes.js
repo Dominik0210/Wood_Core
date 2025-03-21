@@ -1,13 +1,12 @@
-const express = require("express");
-const router = express.Router();
-const projectsController = require("../controllers/projectsController.js")
+import express from "express";
+import projectsController from "../controllers/projectsController.js"; // Asegúrate de la extensión .js
 
+const router = express.Router();
 
 router
     .get("/", projectsController.consultarTodo)
     .post("/", projectsController.insertar)
     .put("/:id", projectsController.actualizar)
-    .delete("/:id", projectsController.eliminar)
+    .delete("/:id", projectsController.eliminar);
 
-
-module.exports = router;
+export default router;

@@ -1,49 +1,56 @@
-const projectsService = require("../services/proyectos");
+import { mostrarProyectos } from "../services/proyectos.js";
+import conexion from "../model/conexion.js"; // Asegúrate de importar tu conexión
 
 class ProjectsController {
     consultarTodo(req, res) {
-        projectsService.mostrarProyectos()
-            .then(proyectosProcesados => {
+        mostrarProyectos()
+            .then((proyectosProcesados) => {
                 res.json(proyectosProcesados);
             })
-            .catch(err => {
+            .catch((err) => {
                 console.error("Error al obtener los proyectos", err);
                 res.status(500).json({ error: "Error al obtener los proyectos" });
             });
     }
 
-
     insertar(req, res) {
-        // prueba de código de que los datos se adquirieron desde el front end
-        // console.log(req.body);
+        const {
+            nombre_proyecto,
+            prioridad,
+            sprint,
+            encargado_proyecto,
+            miembros_equipo,
+            roles_equipo,
+        } = req.body;
 
-        const nombre_proyecto = req.body.nombre_proyecto;
-        const prioridad = req.body.prioridad;
-        const sprint = req.body.sprint;
-        const encargado_proyecto = req.body.encargado_proyecto;
-        const miembros_proyecto = req.body.miembros_equipo;
-        const roles_proyecto = req.body.roles_equipo;
+        const registrarProyecto =
+            "INSERT INTO proyecto_prueba (nombre_proyecto, prioridad, sprint, encargado_proyecto, miembros_proyecto, roles_proyecto) VALUES (?, ?, ?, ?, ?, ?)";
 
-
-        let registrarProyecto = "INSERT INTO proyecto_prueba (nombre_proyecto, prioridad, sprint, encargado_proyecto, miembros_proyecto, roles_proyecto) VALUES ('" + nombre_proyecto + "', '" + prioridad + "', '" + sprint + "', '" + encargado_proyecto + "', '" + miembros_proyecto + "', '" + roles_proyecto + "')";
-
-        conexion.query(registrarProyecto, function (err) {
-            if (err) {
-                throw err
-            } else {
-                console.log("datos almacenados correctamente")
+        conexion.query(
+            registrarProyecto,
+            [
+                nombre_proyecto,
+                prioridad,
+                sprint,
+                encargado_proyecto,
+                miembros_equipo,
+                roles_equipo,
+            ],
+            (err) => {
+                if (err) {
+                    console.error("Error al insertar proyecto:", err);
+                    res.status(500).json({ error: "Error al insertar proyecto" });
+                } else {
+                    console.log("Datos almacenados correctamente");
+                    res.status(201).json({ message: "Proyecto creado exitosamente" });
+                }
             }
-        })
+        );
     }
 
-    actualizar(req, res) {
+    actualizar(req, res) {}
 
-    }
-
-    eliminar(req, res) {
-
-    }
+    eliminar(req, res) {}
 }
 
-
-module.exports = new ProjectsController();
+export default new ProjectsController();
